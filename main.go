@@ -8,20 +8,23 @@ import (
 )
 
 const (
-	scale  = 1    // optional supersampling
-	width  = 1920 // output width in pixels
-	height = 1080 // output height in pixels
-	fovy   = 30   // vertical field of view in degrees
-	near   = 1    // near clipping plane
-	far    = 10   // far clipping plane
+	scale       = 1    // optional supersampling
+	width       = 1920 // output width in pixels
+	height      = 1080 // output height in pixels
+	fovy        = 30   // vertical field of view in degrees
+	near        = 1    // near clipping plane
+	far         = 10   // far clipping plane
+	COLOR_BLACK = "#000000"
+	COLOR_WHITE = "#FFFFFF"
+	COLOR_GRAY  = "#C9C9C9"
 )
 
 var (
-	eye    = V(-3, 1, -0.75)               // camera position
-	center = V(0, -0.07, 0)                // view center position
-	up     = V(0, 1, 0)                    // up vector
-	light  = V(-0.75, 1, 0.25).Normalize() // light direction
-	color  = HexColor("#468966")           // object color
+	eye    = V(2.5, -1.5, 2.0)             // camera position
+	center = V(0, 0, 0)                    // view center position
+	up     = V(0, 0, 1)                    // up vector
+	light  = V(2.0, -2.0, 1.5).Normalize() // light direction
+	color  = HexColor(COLOR_GRAY)          // object color
 )
 
 func main() {
@@ -41,7 +44,8 @@ func main() {
 
 	// create a rendering context
 	context := NewContext(width*scale, height*scale)
-	context.ClearColorBufferWith(HexColor("#FFF8E3"))
+	context.ClearColorBufferWith(HexColor(COLOR_WHITE))
+	// context.Wireframe = true
 
 	// create transformation matrix and light direction
 	aspect := float64(width) / float64(height)
