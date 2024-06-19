@@ -2,6 +2,8 @@ package main
 
 import (
 	"fmt"
+	"os"
+	"time"
 
 	. "github.com/fogleman/fauxgl"
 	"github.com/nfnt/resize"
@@ -21,15 +23,24 @@ const (
 
 var (
 	eye    = V(2.5, -1.5, 2.0)             // camera position
-	center = V(0, 0, 0)                    // view center position
+	center = V(0.25, 0, 0)                 // view center position
 	up     = V(0, 0, 1)                    // up vector
 	light  = V(2.0, -2.0, 1.5).Normalize() // light direction
 	color  = HexColor(COLOR_GRAY)          // object color
 )
 
 func main() {
+	if len(os.Args) < 2 {
+		fmt.Println("Please provide the path to the STL file as a command line argument.")
+		os.Exit(1)
+	}
+
+	startTime := time.Now()
+
+	stlPath := os.Args[1]
+
 	// load a mesh
-	mesh, err := LoadSTL("./models/pi-hq-cam-case-BACK-v6.1.stl")
+	mesh, err := LoadSTL(stlPath)
 	if err != nil {
 		panic(err)
 	}
@@ -37,7 +48,7 @@ func main() {
 
 	// fit mesh in a bi-unit cube centered at the origin
 	mesh.BiUnitCube()
-	mesh.Transform(Scale(V(0.5, 0.5, 0.5)))
+	// mesh.Transform(Scale(V(0.5, 0.5, 0.5)))
 
 	// smooth the normals
 	mesh.SmoothNormalsThreshold(Radians(30))
@@ -65,4 +76,7 @@ func main() {
 
 	// save image
 	SavePNG("out.png", image)
+
+	elapsed := time.Since(startTime)
+	fmt.Printf("Image generated in %s\n", elapsed)
 }
